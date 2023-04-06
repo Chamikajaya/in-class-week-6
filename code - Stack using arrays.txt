@@ -1,0 +1,109 @@
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+// Stack data structure
+class Stack{
+public:
+    int size; // size of the stack
+    int top;  // an integer variable that will keep track of the index of the topmost element of the stack.
+    int *arr; // a pointer to an integer array that will be created dynamically to hold the elements of the stack.
+
+    //Constructor
+    Stack(int size){
+        this->size = size;
+        top = -1;
+        arr = new int[size];
+    };
+    void print_stack(Stack *st){
+        int x = st->top;
+        for (int i = 0; i <= x; i++){
+            cout << st->arr[i] << " --> ";
+        }
+        cout << endl;
+    }
+    // push operation -> Add an element to the top of the stack
+    void push(Stack *st, int data){ // We are passing stack as a pointer coz we want to modify it
+        // before insertion need to check whether the stack is full or not
+        if (st->top == st->size-1){
+            cout << "Stack is full \n";
+            return;
+        }
+        else{
+            ++st->top;
+            st->arr[st->top] = data;
+        }
+    }
+
+    // pop operation --> To delete the topmost
+    // I am only modifying the stack, not returning the last element
+    void pop(Stack *st){
+        if (st->top == -1){
+            cout << "Stack is empty. Can not pop from an empty stack \n";
+            return;
+        }
+        else {
+            st->top--;
+        }
+    }
+
+    // peek operation --> To get an element at a given index
+    //if position = 1; need to delete the topmost element
+    // if position = 2; need to delete the 2nd topmost element
+    void peek(Stack *st, int position){
+        if (st->top == -1){
+            cout << "Stack is empty \n";
+            return;
+        }
+        int index = top - position + 1;
+        if ( index < 0){
+            cout << "Stack size is less than the given position \n";
+            return;
+        }
+        cout << "The element at " << position << " index is " << st->arr[index] << endl;
+    }
+
+    int  is_empty(Stack *st){
+        return st->top == -1 ? 1 : 0;
+    }
+
+    int is_full(Stack *st){
+        return st->top == st->size - 1 ? 1 : 0;
+    }
+
+};
+
+int main(){
+    cout << "Stack using arrays \n";
+    clock_t start, end;
+    start = clock();
+    Stack st(10); // creating a stack of size 10
+    st.push(&st, 8);
+    st.push(&st, 10);
+    st.push(&st, 5);
+    st.push(&st, 11);
+    st.push(&st, 15);
+    st.push(&st, 23);
+    st.push(&st, 6);
+    st.push(&st, 18);
+    st.push(&st, 20);
+    st.push(&st, 17);
+    st.print_stack(&st);
+
+    for (int i = 0; i < 5; i++){
+        st.pop(&st);
+    }
+    st.print_stack(&st);
+
+    st.push(&st, 4);
+    st.push(&st, 30);
+    st.push(&st, 3);
+    st.push(&st, 1);
+    st.print_stack(&st);
+    end = clock();
+    double elapsed = double(end - start) / double(CLOCKS_PER_SEC);
+
+    cout << "Time taken by program is : " << elapsed * 1000 << "milisecs \n";
+
+    return 0;
+}
